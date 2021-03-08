@@ -4,23 +4,29 @@ create database companydb;
 
 use companydb;
 
-create table employee (
-	id int primary key,
-    first_name varchar(30) null,
-    last_name varchar (30) null,
-	role_id int not null,
-    manager_id int null
+create table department (
+	id int unsigned auto_increment primary key,
+    name varchar(30) unique not null
 );
 
 create table role (
-	id int primary key,
-    title varchar(30) null,
-    salary decimal null,
-    department_id int null
+	id int unsigned auto_increment primary key,
+    title varchar(30) unique not null,
+    salary decimal unsigned not null,
+    department_id int unsigned not null,
+    index dep_ind (department_id),
+    constraint fk_department foreign key (department_id) references department(id) on delete cascade
 );
-   
-create table department (
-	id int not null auto_increment,
-    name varchar(30) null,
-    primary key (id)
+
+create table employee (
+	id int unsigned auto_increment primary key,
+    first_name varchar(30) not null,
+    last_name varchar (30) not null,
+	role_id int unsigned not null,
+    index role_ind (role_id),
+    constraint fk_role foreign key (role_id) references role(id) on delete cascade,
+    manager_id int unsigned,
+    index man_ind (manager_id),
+    constraint fk_manager foreign key (manager_id) references employee(id) on delete cascade
 );
+
